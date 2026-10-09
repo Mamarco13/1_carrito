@@ -25,8 +25,7 @@
                             <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}"
                                 th:value="${_csrf.token}">
 
-                            <!-- Campo oculto para el ID -->
-                            <input type="hidden" th:field="${product.id}" />
+                            <!-- No necesitamos campo oculto para ID porque va en la URL -->
 
                             <!-- Nombre del producto -->
                             <div class="mb-3">
@@ -44,7 +43,7 @@
 
                             <!-- Botones de acción -->
                             <div class="d-flex justify-content-between">
-                                <a th:href="@{/products}" class="btn btn-secondary">Cancelar</a>
+                                <a href="products.html" th:href="@{/products}" class="btn btn-secondary">Cancelar</a>
                                 <button type="submit" class="btn btn-success"
                                     th:text="${product.id != null} ? 'Guardar Cambios' : 'Añadir Producto'">
                                     Guardar

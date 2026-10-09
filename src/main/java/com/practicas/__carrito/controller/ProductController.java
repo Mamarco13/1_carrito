@@ -38,7 +38,7 @@ public class ProductController {
         product.setName(name);
         product.setPrice(price);
         productService.saveProduct(product);
-        return "redirect:/admin"; // Redirigir correctamente a /admin
+        return "redirect:/products"; // Redirigir correctamente a /products (no existe admin.html)
     }
 
     // Muestra el formulario para editar productos
@@ -68,6 +68,6 @@ public class ProductController {
     @PostMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return "redirect:/admin"; // Redirigir correctamente a /admin
+        return "redirect:/products"; // Redirigir correctamente a /products (no existe admin.html)
     }
 }

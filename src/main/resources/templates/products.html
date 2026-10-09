@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <title>Catalogo de Productos</title>
@@ -9,13 +9,13 @@
 <body>
     <div class="container">
         <nav class="navbar navbar-light bg-light">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="index.html" th:href="@{/}">
                 <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Inicio" width="30" height="30">
             </a>
         </nav>
         <h1 class="text-center my-5">Catalogo de Productos</h1>
         <div class="mb-4">
-            <a href="/cart" class="btn btn-secondary">Ver Carrito</a>
+            <a href="cart.html" th:href="@{/cart}" class="btn btn-secondary">Ver Carrito</a>
         </div>
         <div class="row">
             <div th:each="product : ${products}" class="col-md-4">
@@ -27,6 +27,15 @@
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                             <button type="submit" class="btn btn-primary">Agregar al Carrito</button>
                         </form>
+                        
+                        <!-- Botones de Administrador -->
+                        <div sec:authorize="hasRole('ADMIN')" class="mt-2 d-flex justify-content-between">
+                            <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-warning btn-sm">Editar</a>
+                            <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
+                                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este producto?');">Eliminar</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
