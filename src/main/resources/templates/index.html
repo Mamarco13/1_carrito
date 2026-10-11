@@ -12,30 +12,13 @@
 
         <!-- Botones principales -->
         <div class="text-center mb-5">
-            <a href="products.html" th:href="@{/products}" class="btn btn-primary btn-lg me-3">Ver Catálogo de Productos</a>
+            <a href="products.html" th:href="@{/products}" class="btn btn-primary btn-lg me-3">Ver Catálogo de
+                Productos</a>
             <a href="cart.html" th:href="@{/cart}" class="btn btn-secondary btn-lg me-3">Ver Carrito</a>
-            <a href="product_form.html" th:href="@{/products/add}" class="btn btn-warning btn-lg">Administrar Productos</a>
+            <a href="product_form.html" th:href="@{/products/add}" class="btn btn-warning btn-lg">Administrar
+                Productos</a>
         </div>
 
-        <!-- Sección de Noticias -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Últimas Noticias</h4>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li th:each="article : ${news}" class="list-group-item">
-                                <h5 th:text="${article.title}">Título de la Noticia</h5>
-                                <p th:text="${article.description}">Descripción de la Noticia</p>
-                                <a th:href="${article.url}" class="btn btn-link" target="_blank">Leer más</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </body>
 
