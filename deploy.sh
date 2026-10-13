@@ -15,7 +15,7 @@ fi
 # Detener contenedores previos si existen (incluye contenedores sueltos)
 echo "Limpiando contenedores anteriores..."
 docker rm -f carrito-postgres carrito-app 2>/dev/null || true
-docker-compose down -v 2>/dev/null || true
+docker-compose down 2>/dev/null || true
 
 # Construir y levantar
 echo "Construyendo imagen de la aplicacion..."

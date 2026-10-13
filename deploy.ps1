@@ -20,7 +20,7 @@ try {
 # Detener contenedores previos si existen (incluye contenedores sueltos)
 Write-Host "Limpiando contenedores anteriores..." -ForegroundColor Yellow
 docker rm -f carrito-postgres carrito-app 2>$null | Out-Null
-docker-compose down -v 2>$null | Out-Null
+docker-compose down 2>$null | Out-Null
 
 # Construir y levantar
 Write-Host "Construyendo imagen de la aplicacion..." -ForegroundColor Cyan
