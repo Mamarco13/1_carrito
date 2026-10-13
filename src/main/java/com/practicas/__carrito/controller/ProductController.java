@@ -1,9 +1,14 @@
 package com.practicas.__carrito.controller;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.practicas.__carrito.model.Product;
+import com.practicas.__carrito.service.DatabaseExportService;
 import com.practicas.__carrito.service.ProductService;
 
 @Controller
@@ -11,10 +16,12 @@ import com.practicas.__carrito.service.ProductService;
 public class ProductController {
     // Tenemos un Servicio dentro del controlador
     private final ProductService productService;
+    private final DatabaseExportService databaseExportService;
 
     // Constructor del controlador
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, DatabaseExportService databaseExportService) {
         this.productService = productService;
+        this.databaseExportService = databaseExportService;
     }
 
     //Muestra los productos
@@ -22,6 +29,21 @@ public class ProductController {
     public String getProductsPage(Model model) {
         model.addAttribute("products", productService.getAllProducts());
         return "products"; // Devuelve products.html desde las plantillas
+    }
+
+    // Export database as SQL script
+    @GetMapping("/export")
+    public ResponseEntity<ByteArrayResource> exportDatabase() {
+        byte[] sqlContent = databaseExportService.exportDatabaseToSql();
+        String filename = "database_export_" + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".sql";
+
+        ByteArrayResource resource = new ByteArrayResource(sqlContent);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .contentType(MediaType.parseMediaType("application/sql"))
+                .contentLength(sqlContent.length)
+                .body(resource);
     }
 
     // Muestra el formulario para agregar productos
