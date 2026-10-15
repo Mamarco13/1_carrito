@@ -23,6 +23,13 @@ public class ProductService {
         return productRepo.findAll();
     }
 
+    public List<Product> searchProductsByName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return getAllProducts();
+        }
+        return productRepo.findByNameContainingIgnoreCase(name.trim());
+    }
+
     public Product getProductById(Long id) {
         return productRepo.findById(id).orElse(null);
     }

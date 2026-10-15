@@ -29,8 +29,15 @@ public class ProductController {
 
     //Muestra los productos
     @GetMapping
-    public String getProductsPage(Model model) {
-        model.addAttribute("products", productService.getAllProducts());
+    public String getProductsPage(Model model, @RequestParam(required = false) String search) {
+        List<Product> products;
+        if (search != null && !search.trim().isEmpty()) {
+            products = productService.searchProductsByName(search);
+            model.addAttribute("searchTerm", search);
+        } else {
+            products = productService.getAllProducts();
+        }
+        model.addAttribute("products", products);
         return "products"; // Devuelve products.html desde las plantillas
     }
 
