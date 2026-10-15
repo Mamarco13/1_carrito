@@ -1,24 +1,37 @@
-# Build output
+# Maven
 target/
-*.jar
-*.war
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.classpath
+.project
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
 
 # Git
 .git/
 .gitignore
 
-# IDE / OS
-.idea/
-.vscode/
-*.iml
-.DS_Store
-Thumbs.db
-
-# Apuntes
-*.md
-!README.md
+# Render
+render.yaml
 
 # Docker
-Dockerfile*
-docker-compose*
-.dockerignore
+Dockerfile
+docker-compose*.yml
+
+# Local DB
+*.db
+*.sqlite

@@ -1,0 +1,34 @@
+services:
+  # Servicio Web (Spring Boot)
+  - type: web
+    name: carrito-app
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /products
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: carrito-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: carrito-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: carrito-db
+          property: password
+      - key: JAVA_OPTS
+        value: "-Xmx512m -Xms256m"
+      - key: SERVER_PORT
+        value: "8080"
+
+  # Base de datos PostgreSQL
+  - type: pserv
+    name: carrito-db
+    plan: free
+    postgresMajorVersion: 16
+    databaseName: carrito_db
+    user: carrito_user
+    region: oregon
