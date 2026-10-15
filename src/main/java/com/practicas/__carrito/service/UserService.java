@@ -68,4 +68,16 @@ public class UserService {
             userRepo.save(admin);
         }
     }
+
+    // Create default demo user if not exists
+    public void createDefaultUser() {
+        if (!userRepo.existsByUsername("user")) {
+            User user = new User();
+            user.setUsername("user");
+            user.setPassword(passwordEncoder.encode("user"));
+            user.setEmail("user@example.com");
+            user.setRole(User.Role.USER);
+            userRepo.save(user);
+        }
+    }
 }

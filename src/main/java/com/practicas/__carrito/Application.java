@@ -15,9 +15,10 @@ public class Application {
     }
 
     @Bean
-    CommandLineRunner initAdmin(UserService userService) {
+    CommandLineRunner initUsers(UserService userService) {
         return args -> {
             userService.createDefaultAdmin();
+            userService.createDefaultUser();
         };
     }
 }
