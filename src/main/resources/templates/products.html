@@ -108,10 +108,7 @@
                         <!-- Botones de Administrador -->
                         <div sec:authorize="hasRole('ADMIN')" class="mt-2 d-flex justify-content-between">
                             <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-warning btn-sm">Editar</a>
-                            <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
-                                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este producto?');">Eliminar</button>
-                            </form>
+                            <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm">Eliminar</a>
                         </div>
                     </div>
                 </div>

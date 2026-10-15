@@ -7,9 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import com.practicas.__carrito.model.CartItem;
 import com.practicas.__carrito.model.Product;
 import com.practicas.__carrito.service.DatabaseExportService;
 import com.practicas.__carrito.service.ProductService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/products") // API en /products
@@ -86,10 +89,31 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    // Borra productos
-    @PostMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
+    // Muestra advertencia antes de borrar producto
+    @GetMapping("/delete/{id}")
+    public String showDeleteWarning(@PathVariable Long id, Model model) {
+        Product product = productService.getProductById(id);
+        if (product == null) {
+            return "redirect:/products";
+        }
+        
+        if (productService.isProductInAnyCart(id)) {
+            List<CartItem> cartItems = productService.getCartItemsWithProduct(id);
+            model.addAttribute("product", product);
+            model.addAttribute("cartItems", cartItems);
+            model.addAttribute("usersCount", cartItems.size());
+            return "product_delete_warning"; // templates/product_delete_warning.html
+        } else {
+            // Si no está en ningún carrito, eliminamos directamente
+            productService.deleteProduct(id);
+            return "redirect:/products";
+        }
+    }
+
+    // Confirma la eliminación del producto
+    @PostMapping("/delete/{id}/confirm")
+    public String deleteProductConfirmed(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return "redirect:/products"; // Redirigir correctamente a /products (no existe admin.html)
+        return "redirect:/products"; // Redirigir correctamente a /products
     }
 }
