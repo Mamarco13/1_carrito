@@ -26,24 +26,30 @@ public class SecurityConfig {
                         .requestMatchers("/", "/index", "/index.html", "/login", "/register",
                                 "/css/**", "/js/**", "/images/**", "/webjars/**")
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/products", "/products/**", "/cart", "/cart/**").permitAll()
-                        .requestMatchers("/api/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/cart/**").authenticated()
-                        .requestMatchers("/admin/**",
-                                "/products/add", "/products/edit/**", "/products/delete/**",
-                                "/products/export")
+                        .requestMatchers("/h2-console", "/h2-console/**")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products")
+                        .permitAll()
+                        .requestMatchers("/admin", "/admin/**")
                         .hasRole("ADMIN")
+                        .requestMatchers("/products/add", "/products/edit/**",
+                                "/products/delete/**", "/products/save", "/products/export")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/cart", "/cart/**")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/products", false)
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .permitAll())
-                .csrf(csrf -> csrf.ignoringRequestMatchers(
-                        "/cart/**", "/products/add", "/products/edit/**", "/products/delete/**"));
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/h2-console/**"))
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin()));
         return http.build();
     }
 

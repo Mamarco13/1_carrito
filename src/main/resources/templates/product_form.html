@@ -91,31 +91,30 @@
                         </h4>
                     </div>
                     <div class="card-body p-4">
-                        <form
-                            th:action="${product.id != null} ? @{/products/edit/{id}(id=${product.id})} : @{/products/add}"
-                            method="post">
+                        <form th:action="@{/products/save}" th:object="${product}" method="post">
                             <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}"
                                 th:value="${_csrf.token}">
 
-                            <!-- No necesitamos campo oculto para ID porque va en la URL -->
+                            <!-- Campo oculto para ID (en caso de edición) -->
+                            <input type="hidden" th:field="*{id}" />
 
                             <!-- Nombre del producto -->
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nombre del Producto:</label>
-                                <input type="text" id="name" name="name" class="form-control" th:value="${product.name}"
+                                <input type="text" id="name" th:field="*{name}" class="form-control"
                                     required placeholder="Ej. Camiseta, Zapatillas...">
                             </div>
 
                             <!-- Precio del producto -->
                             <div class="mb-4">
                                 <label for="price" class="form-label">Precio (€):</label>
-                                <input type="number" id="price" name="price" step="0.01" min="0" class="form-control"
-                                    th:value="${product.price}" required placeholder="Ej. 19.99">
+                                <input type="number" id="price" th:field="*{price}" step="0.01" min="0" class="form-control"
+                                    required placeholder="Ej. 19.99">
                             </div>
 
                             <!-- Botones de acción -->
                             <div class="d-flex justify-content-between">
-                                <a href="products.html" th:href="@{/products}" class="btn btn-secondary">Cancelar</a>
+                                <a th:href="@{/products}" class="btn btn-secondary">Cancelar</a>
                                 <button type="submit" class="btn btn-success"
                                     th:text="${product.id != null} ? 'Guardar Cambios' : 'Añadir Producto'">
                                     Guardar

@@ -56,21 +56,28 @@ public class ProductController {
                 .body(resource);
     }
 
+    // Guarda o actualiza productos (ruta estándar del guión)
+    @PostMapping("/save")
+    public String saveProduct(@ModelAttribute Product product) {
+        productService.saveProduct(product);
+        return "redirect:/products";
+    }
+
     // Muestra el formulario para agregar productos
     @GetMapping("/add")
     public String showAddForm(Model model) {
         model.addAttribute("product", new Product());
-        return "product_form"; // templates/product_form.html
+        return "formulario-producto"; // templates/formulario-producto.html
     }
 
-    // Agrega productos
+    // Agrega productos (compatibilidad hacia atrás con formulario previo)
     @PostMapping("/add")
     public String addProduct(@RequestParam String name, @RequestParam double price) {
         Product product = new Product();
         product.setName(name);
         product.setPrice(price);
         productService.saveProduct(product);
-        return "redirect:/products"; // Redirigir correctamente a /products (no existe admin.html)
+        return "redirect:/products";
     }
 
     // Muestra el formulario para editar productos
@@ -79,7 +86,7 @@ public class ProductController {
         Product product = productService.getProductById(id);
         if (product != null) {
             model.addAttribute("product", product);
-            return "product_form";
+            return "formulario-producto";
         }
         return "redirect:/products";
     }
@@ -96,7 +103,7 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    // Muestra advertencia antes de borrar producto
+    // Muestra advertencia antes de borrar producto (GET opcional)
     @GetMapping("/delete/{id}")
     public String showDeleteWarning(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id);
@@ -109,7 +116,7 @@ public class ProductController {
             model.addAttribute("product", product);
             model.addAttribute("cartItems", cartItems);
             model.addAttribute("usersCount", cartItems.size());
-            return "product_delete_warning"; // templates/product_delete_warning.html
+            return "product_delete_warning";
         } else {
             // Si no está en ningún carrito, eliminamos directamente
             productService.deleteProduct(id);
@@ -117,10 +124,17 @@ public class ProductController {
         }
     }
 
-    // Confirma la eliminación del producto
+    // Eliminar producto según la ruta estándar del guión (POST /products/delete/{id})
+    @PostMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return "redirect:/products";
+    }
+
+    // Confirma la eliminación del producto desde el modal/pantalla de aviso
     @PostMapping("/delete/{id}/confirm")
     public String deleteProductConfirmed(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return "redirect:/products"; // Redirigir correctamente a /products
+        return "redirect:/products";
     }
 }
