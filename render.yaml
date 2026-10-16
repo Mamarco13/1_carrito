@@ -5,30 +5,43 @@ services:
     runtime: docker
     dockerfilePath: ./Dockerfile
     plan: free
+    region: oregon
     healthCheckPath: /products
     envVars:
-      - key: SPRING_DATASOURCE_URL
+      # La app construye la URL JDBC a partir de estos valores
+      # (ver src/main/resources/application.properties)
+      - key: DB_HOST
         fromDatabase:
           name: carrito-db
-          property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: carrito-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: carrito-db
+          property: database
+      - key: DB_USER
         fromDatabase:
           name: carrito-db
           property: user
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: carrito-db
           property: password
+      # Hibernate crea/actualiza las tablas automaticamente al arrancar
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+      # Limita el heap de la JVM al 75% de los 512 MB del plan free
       - key: JAVA_OPTS
-        value: "-Xmx512m -Xms256m"
-      - key: SERVER_PORT
-        value: "8080"
+        value: "-XX:MaxRAMPercentage=75.0"
 
-  # Base de datos PostgreSQL
-  - type: pserv
-    name: carrito-db
+# Base de datos PostgreSQL (va en su propia clave: databases, NO dentro de services)
+databases:
+  - name: carrito-db
     plan: free
-    postgresMajorVersion: 16
+    postgresMajorVersion: "16"
     databaseName: carrito_db
     user: carrito_user
     region: oregon
